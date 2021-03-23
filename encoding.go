@@ -13,12 +13,14 @@ var enc encoders.Encoder
 
 var encs map[string]func() encoders.Encoder = map[string]func() encoders.Encoder{
 	"PNG": encoders.NewPNGEncoder,
+	"AVI": encoders.NewAVIEncoder,
 }
 
 func record(path string, speedup int, framerate int, encoder string, display int) {
 	recording = true
 	enc = encs[encoder]()
-	err := enc.Initialize(path, framerate)
+	rct := screenshot.GetDisplayBounds(display)
+	err := enc.Initialize(path, framerate, rct.Dx(), rct.Dy())
 	handle(err)
 	go func() {
 		var scr image.Image
@@ -28,8 +30,10 @@ func record(path string, speedup int, framerate int, encoder string, display int
 			time.Sleep(time.Duration(1/framerate) * time.Second)
 			scr, err = screenshot.CaptureRect(rct)
 			handle(err)
-			err = enc.Encode(scr)
-			handle(err)
+			if recording {
+				err = enc.Encode(scr)
+				handle(err)
+			}
 		}
 	}()
 }

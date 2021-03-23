@@ -1,5 +1,45 @@
 package main
 
-import "github.com/Nv7-Github/screenlapse/encoders"
+import (
+	"image"
+	"time"
 
-var encs map[string]func() encoders.Encoder = map[string]func() encoders.Encoder{"PNG": encoders.NewPNGEncoder}
+	"github.com/Nv7-Github/screenlapse/encoders"
+	"github.com/kbinani/screenshot"
+)
+
+var recording = false
+var enc encoders.Encoder
+
+var encs map[string]func() encoders.Encoder = map[string]func() encoders.Encoder{
+	"PNG": encoders.NewPNGEncoder,
+}
+
+func record(path string, speedup int, framerate int, encoder string, display int) {
+	recording = true
+	enc = encs[encoder]()
+	err := enc.Initialize(path, framerate)
+	handle(err)
+	go func() {
+		var scr image.Image
+		var err error
+		rct := screenshot.GetDisplayBounds(display)
+		for recording {
+			time.Sleep(time.Duration(1/framerate) * time.Second)
+			scr, err = screenshot.CaptureRect(rct)
+			handle(err)
+			err = enc.Encode(scr)
+			handle(err)
+		}
+	}()
+}
+
+func stopRecording() {
+	recording = false
+	err := enc.Cleanup()
+	handle(err)
+}
+
+func getDisplays() int {
+	return screenshot.NumActiveDisplays()
+}

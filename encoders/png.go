@@ -19,7 +19,7 @@ func NewPNGEncoder() Encoder {
 }
 
 // Initialize initializes the encoder
-func (p *pngEncoder) Initialize(path string) error {
+func (p *pngEncoder) Initialize(path string, framerate int) error {
 	p.path = path + "%d.png"
 	return nil
 }

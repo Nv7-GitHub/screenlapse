@@ -38,8 +38,14 @@ func setupUI() {
 	outputForm := ui.NewForm()
 	outputForm.SetPadded(true)
 
-	speedInput := ui.NewSpinbox(1, 100)
+	speedInput := ui.NewSpinbox(1, 10000)
 	speedInput.SetValue(2)
+
+	frameRateInput := ui.NewSpinbox(1, 120)
+	frameRateInput.SetValue(24)
+
+	displayInput := ui.NewSpinbox(1, getDisplays())
+	displayInput.SetValue(0)
 
 	filename := ""
 	hbox := ui.NewHorizontalBox()
@@ -65,13 +71,25 @@ func setupUI() {
 	encoderBox.SetSelected(0)
 
 	outputForm.Append("Speed Up", speedInput, false)
+	outputForm.Append("Frame Rate", frameRateInput, false)
+	outputForm.Append("Display Number", displayInput, false)
 	outputForm.Append("Output File", hbox, false)
 	outputForm.Append("Encoder", encoderBox, false)
 	outputGroup.SetChild(outputForm)
 
 	recordBtn := ui.NewButton("Record!")
 	recordBtn.OnClicked(func(*ui.Button) {
-		ui.MsgBox(win, "Info", fmt.Sprintf("Encoder: %s\nSpeed Up: %dx\nOutput File: %s", encoderNames[encoderBox.Selected()], speedInput.Value(), filename))
+		if filename == "" {
+			ui.MsgBox(win, "Invalid File!", "You need to select where to save the recording!")
+			return
+		}
+		if !recording {
+			record(filename, speedInput.Value(), frameRateInput.Value(), encoderNames[encoderBox.Selected()], displayInput.Value())
+			recordBtn.SetText("Stop Recording")
+		} else {
+			stopRecording()
+			recordBtn.SetText("Record!")
+		}
 	})
 
 	vbox.Append(outputGroup, false)

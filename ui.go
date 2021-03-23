@@ -1,21 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/andlabs/ui"
 )
 
 var win *ui.Window
-
-func handle(err error) {
-	if err != nil {
-		ui.MsgBoxError(win, "Error!", err.Error())
-		fmt.Printf("Error: %s\n", err.Error())
-		os.Exit(1)
-	}
-}
 
 func setupUI() {
 	win = ui.NewWindow("Screenlapse", 640, 200, true)

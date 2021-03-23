@@ -55,9 +55,9 @@ func setupUI() {
 	hbox.Append(saveBtn, false)
 
 	encoderBox := ui.NewCombobox()
-	encoderNames := make([]string, len(encoders))
+	encoderNames := make([]string, len(encs))
 	i := 0
-	for k := range encoders {
+	for k := range encs {
 		encoderBox.Append(k)
 		encoderNames[i] = k
 		i++

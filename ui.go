@@ -7,7 +7,7 @@ import (
 var win *ui.Window
 
 func setupUI() {
-	win = ui.NewWindow("Screenlapse", 640, 200, true)
+	win = ui.NewWindow("Screenlapse", 640, 0, true)
 	win.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true

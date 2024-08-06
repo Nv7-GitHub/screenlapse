@@ -27,7 +27,7 @@ func record(path string, speedup int, framerate int, encoder string, display int
 		var err error
 		rct := screenshot.GetDisplayBounds(display)
 		for recording {
-			time.Sleep(time.Duration(1/framerate) * time.Second)
+			time.Sleep(time.Duration(speedup/framerate) * time.Second)
 			scr, err = screenshot.CaptureRect(rct)
 			handle(err)
 			if recording {

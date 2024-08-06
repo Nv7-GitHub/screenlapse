@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/andlabs/ui"
-	_ "github.com/andlabs/ui/winmanifest"
+	"github.com/Nv7-Github/ui"
+	_ "github.com/Nv7-Github/ui/winmanifest"
 )
 
 func handle(err error) {

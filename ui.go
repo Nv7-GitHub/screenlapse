@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/andlabs/ui"
+	"github.com/Nv7-Github/ui"
 )
 
 var win *ui.Window
